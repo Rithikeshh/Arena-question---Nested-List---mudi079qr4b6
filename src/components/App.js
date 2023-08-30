@@ -155,7 +155,47 @@ const states = [
 ];
 
 function App() {
-  return <div id="main"></div>;
+  const [visibility,setVisibility] = useState("none");
+  function handleCities(event,cities){
+    console.log(cities)
+    console.log(event.target)
+    console.log(event.target.id)
+    console.log(event.target.children[0])
+    if(!event.target.children[0]) return;
+    if(event.target.children[0].style.display === "block"){
+      event.target.children[0].style.display = "none"
+    }
+    else{
+      event.target.children[0].style.display = "block"
+    }
+    setVisibility(visibility)
+  }
+  return <div id="main">
+    <ul>{states.map((state,index)=>{
+      return <li id={"state"+(index+1)} onClick={(event)=>{
+        handleCities(event,state.cities)
+      }}>{state.name}<Cities cities={state.cities} visibility={visibility}/></li>
+    })
+  }</ul>
+  </div>;
+}
+function Cities({cities,visibility}){
+
+  return (
+    <ul style={{display:visibility}}>{cities.map((city,index)=>{
+      return <li id={"city"+(index+1)} >{city.name}<Towns towns={city.towns} visibility={"none"}/></li>
+    })
+    }</ul>
+  )
+}
+function Towns({towns,visibility}){
+  
+  return (
+    <ul style={{display:visibility}}>{towns.map((town,index)=>{
+      return <li id={"town"+(index+1)}>{town.name}</li>
+    })
+    }</ul>
+  )
 }
 
 export default App;
