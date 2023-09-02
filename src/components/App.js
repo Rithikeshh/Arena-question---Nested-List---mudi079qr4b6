@@ -1,4 +1,5 @@
-import React, { Component, useState } from "react";
+import React, { Component, useState, useEffect } from "react";
+// import _ from "lodash";
 import "./../styles/App.css";
 
 // Do not alter the states const and values inside it.
@@ -10,33 +11,33 @@ const states = [
         name: "Indore",
         towns: [
           {
-            name: "Mhow",
+            name: "Mhow"
           },
           {
-            name: "Dewas",
-          },
-        ],
+            name: "Dewas"
+          }
+        ]
       },
       {
         name: "Bhopal",
         towns: [
           {
-            name: "Manit",
+            name: "Manit"
           },
           {
-            name: "Berasia",
-          },
-        ],
+            name: "Berasia"
+          }
+        ]
       },
       {
         name: "Gwalior",
         towns: [
           {
-            name: "Ajaypur",
-          },
-        ],
-      },
-    ],
+            name: "Ajaypur"
+          }
+        ]
+      }
+    ]
   },
   {
     name: "Jharkhand",
@@ -45,36 +46,36 @@ const states = [
         name: "Dhanbad",
         towns: [
           {
-            name: "IIT(ISM) Dhanbad",
+            name: "IIT(ISM) Dhanbad"
           },
           {
-            name: "Hirapur",
-          },
-        ],
+            name: "Hirapur"
+          }
+        ]
       },
       {
         name: "Wasseypur",
         towns: [
           {
-            name: "Sardar khan's",
+            name: "Sardar khan's"
           },
           {
-            name: "Faizal khan's",
-          },
-        ],
+            name: "Faizal khan's"
+          }
+        ]
       },
       {
         name: "Mirzapur",
         towns: [
           {
-            name: "Kaleen bhaiya's",
+            name: "Kaleen bhaiya's"
           },
           {
-            name: "Guddu bhaiya's",
-          },
-        ],
-      },
-    ],
+            name: "Guddu bhaiya's"
+          }
+        ]
+      }
+    ]
   },
   {
     name: "Assam",
@@ -83,36 +84,36 @@ const states = [
         name: "Guwhati",
         towns: [
           {
-            name: "Amin",
+            name: "Amin"
           },
           {
-            name: "Jalah",
-          },
-        ],
+            name: "Jalah"
+          }
+        ]
       },
       {
         name: "Jungle1",
         towns: [
           {
-            name: "Tiger found at IIT Guwahati",
+            name: "Tiger found at IIT Guwahati"
           },
           {
-            name: "Leopard found in IIT Guwahati",
-          },
-        ],
+            name: "Leopard found in IIT Guwahati"
+          }
+        ]
       },
       {
         name: "Tezpur",
         towns: [
           {
-            name: "Dibrugarh",
+            name: "Dibrugarh"
           },
           {
-            name: "Silchar",
-          },
-        ],
-      },
-    ],
+            name: "Silchar"
+          }
+        ]
+      }
+    ]
   },
   {
     name: "Bihar",
@@ -121,81 +122,114 @@ const states = [
         name: "Patna",
         towns: [
           {
-            name: "Sonpur",
+            name: "Sonpur"
           },
           {
-            name: "Maner",
-          },
-        ],
+            name: "Maner"
+          }
+        ]
       },
       {
         name: "Gaya",
         towns: [
           {
-            name: "Bakraur",
+            name: "Bakraur"
           },
           {
-            name: "Barachatti",
-          },
-        ],
+            name: "Barachatti"
+          }
+        ]
       },
       {
         name: "Darbhanga",
         towns: [
           {
-            name: "Singhwara",
+            name: "Singhwara"
           },
           {
-            name: "Jale",
-          },
-        ],
-      },
-    ],
-  },
+            name: "Jale"
+          }
+        ]
+      }
+    ]
+  }
 ];
 
+// function transformState(states) {
+//   const newState = _.cloneDeep(states);
+//   for (let state of newState) {
+//     state.isOppened = false;
+//     for (let city of state.cities) {
+//       city.isOppened = false;
+//       for (let town in city.towns) {
+//         town.isOppened = false;
+//       }
+//     }
+//   }
+//   return newState;
+// }
+
+// console.log(listOfStates);
+
 function App() {
-  const [visibility,setVisibility] = useState("none");
-  function handleCities(event,cities){
-    console.log(cities)
-    console.log(event.target)
-    console.log(event.target.id)
-    console.log(event.target.children[0])
-    if(!event.target.children[0]) return;
-    if(event.target.children[0].style.display === "block"){
-      event.target.children[0].style.display = "none"
+  const [staetDatat, setStateData] = useState([]);
+  useEffect(() => {
+    const listOfStates = [];
+    for (let state of states) {
+      let listOfCities = [];
+      for (let city of state.cities) {
+        let listOfTowns = [];
+        for (let town of city.towns) {
+          let townElement = <List name={town.name} key={town.name}></List>;
+          listOfTowns.push(townElement);
+        }
+        let cityElement = (
+          <List name={city.name} key={city.name}>
+            {listOfTowns}
+          </List>
+        );
+        listOfCities.push(cityElement);
+      }
+      let stateElement = (
+        <List name={state.name} key={state.name}>
+          {listOfCities}
+        </List>
+      );
+      listOfStates.push(stateElement);
     }
-    else{
-      event.target.children[0].style.display = "block"
-    }
-    setVisibility(visibility)
-  }
-  return <div id="main">
-    <ul>{states.map((state,index)=>{
-      return <li id={"state"+(index+1)} onClick={(event)=>{
-        handleCities(event,state.cities)
-      }}>{state.name}<Cities cities={state.cities} visibility={visibility}/></li>
-    })
-  }</ul>
-  </div>;
-}
-function Cities({cities,visibility}){
+    setStateData(listOfStates);
+  }, []);
 
   return (
-    <ul style={{display:visibility}}>{cities.map((city,index)=>{
-      return <li id={"city"+(index+1)} >{city.name}<Towns towns={city.towns} visibility={"none"}/></li>
-    })
-    }</ul>
-  )
+    <div>
+      Welcome to the app
+      <ul>{staetDatat}</ul>
+    </div>
+  );
 }
-function Towns({towns,visibility}){
-  
+
+function List({ children, name }) {
+  // useEffect(() => {
+  //   console.log(`hi li was created for ${name}`);
+  //   return () => {
+  //     console.log(`hi li was destroyed for ${name}`);
+  //   };
+  // }, []);
+  const [isChildrenVisable, setIsChildrenVisable] = useState(false);
   return (
-    <ul style={{display:visibility}}>{towns.map((town,index)=>{
-      return <li id={"town"+(index+1)}>{town.name}</li>
-    })
-    }</ul>
-  )
+    <li>
+      <div
+        onClick={() => {
+          setIsChildrenVisable((value) => {
+            return !value;
+          });
+        }}
+      >
+        {name}
+      </div>
+      {isChildrenVisable ? <ul>{children}</ul> : null}
+    </li>
+  );
 }
 
 export default App;
