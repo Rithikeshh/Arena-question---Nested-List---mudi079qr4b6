@@ -1,5 +1,6 @@
 import React, { Component, useState, useEffect } from "react";
 // import _ from "lodash";
+// import "./styles.css";
 import "./../styles/App.css";
 
 // Do not alter the states const and values inside it.
@@ -175,40 +176,46 @@ function App() {
   const [staetDatat, setStateData] = useState([]);
   useEffect(() => {
     const listOfStates = [];
+    let indexOfState = 1;
     for (let state of states) {
       let listOfCities = [];
+      let indexOfCity = 1;
       for (let city of state.cities) {
         let listOfTowns = [];
+        let indexOfTown = 1;
         for (let town of city.towns) {
-          let townElement = <List name={town.name} key={town.name}></List>;
+          let townElement = <List name={town.name} key={town.name} id={"town"+indexOfTown}></List>;
           listOfTowns.push(townElement);
+          indexOfTown++;
         }
         let cityElement = (
-          <List name={city.name} key={city.name}>
+          <List name={city.name} key={city.name} id={"city"+indexOfCity}>
             {listOfTowns}
           </List>
         );
         listOfCities.push(cityElement);
+        indexOfCity++;
       }
       let stateElement = (
-        <List name={state.name} key={state.name}>
+        <List name={state.name} key={state.name} id={"state"+indexOfState}>
           {listOfCities}
         </List>
       );
       listOfStates.push(stateElement);
+      indexOfState++;
     }
     setStateData(listOfStates);
   }, []);
 
   return (
-    <div>
+    <div id="main">
       Welcome to the app
       <ul>{staetDatat}</ul>
     </div>
   );
 }
 
-function List({ children, name }) {
+function List({ children, name, id }) {
   // useEffect(() => {
   //   console.log(`hi li was created for ${name}`);
   //   return () => {
@@ -217,7 +224,7 @@ function List({ children, name }) {
   // }, []);
   const [isChildrenVisable, setIsChildrenVisable] = useState(false);
   return (
-    <li>
+    <li id={id}>
       <div
         onClick={() => {
           setIsChildrenVisable((value) => {
